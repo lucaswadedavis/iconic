@@ -14,7 +14,7 @@ var app={m:{},v:{},c:{}};
 
 app.c.init=function(){
 	app.m.password=false;
-	app.m.metadata={"name":"Iconic Darwin","version":"0.0.1"};
+	app.m.metadata={"name":"Iconic","version":"0.0.2"};
 	var b=app.c.bounds();
 	app.m.genome={};
 	app.m.genome.r=[];
@@ -41,7 +41,7 @@ app.c.listeners=function(){
 			var iconWidth=$("input[name=size]:checked").val();
 			iconWidth=parseInt(iconWidth);
 			app.v.icon("div#icons",iconWidth);
-			console.log(iconWidth);
+			//console.log(iconWidth);
 		}
 	});
 
@@ -95,7 +95,7 @@ app.v.init=function(){
 	$("body").html(d);
 	var iconWidth=$("input[name=size]:checked").val();
 	iconWidth=parseInt(iconWidth);
-	console.log(iconWidth);
+	//console.log(iconWidth);
 	for (var i=0;i<5;i++){
 		app.v.icon("div#icons",iconWidth);
 	}
@@ -117,7 +117,7 @@ app.v.icon=function(target,width){
 			var iconWidth=$("input[name=size]:checked").val();
 			iconWidth=parseInt(iconWidth);
 			app.v.icon("div#icons",iconWidth);
-			console.log(iconWidth);
+			///console.log(iconWidth);
 		}
 
 		$("div#saved canvas#"+id).on("click",function(){
@@ -136,7 +136,7 @@ app.v.icon=function(target,width){
 			  url: "http://peopleofthebit.com/luke_davis/labs/iconic/php/createRecord.php",
 			  data: {image:dataURL,password:app.m.password}
 			}).done(function(o) {
-			  console.log('saved');
+			  //console.log('saved');
 			});
 		}
 
