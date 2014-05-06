@@ -1,7 +1,6 @@
 $(document).ready(function(){
 	app.c.init();
 	app.v.init();
-	app.c.listeners();
 })
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -16,17 +15,6 @@ app.c.init=function(){
 	app.m.password=false;
 	app.m.metadata={"name":"Iconic","version":"0.0.2"};
 	var b=app.c.bounds();
-	app.m.genome={};
-	app.m.genome.r=[];
-	app.m.genome.rf=[];
-	app.m.genome.color=[];
-	app.m.genome.lw=[];
-	app.m.genome.steps=[];
-	app.m.genome.incrementMod=[];
-	app.m.genome.n=[];
-	app.m.genome.rotation=[];
-	app.m.genome.fadeColor=[];
-	app.m.genome.fadeRadius=[];
 };
 
 app.c.listeners=function(){
@@ -45,17 +33,22 @@ app.c.listeners=function(){
 		}
 	});
 
-/*	
-	$(window).resize(function(){
-		$("body").fadeOut(function(){
-			$("body").html("");
-			app.c.init();
-			app.v.init();
-			$("body").fadeIn();
-		})
-	});
-*/
+
 };
+
+app.c.save=function(){
+	//send it to the database
+	if (app.m.password!=false){
+	var dataURL=document.getElementById(id).toDataURL();
+	$.ajax({
+		  type: "POST",
+		  url: "http://peopleofthebit.com/dev/iconic/php/createRecord.php",
+		  data: {image:dataURL,password:app.m.password}
+		}).done(function(o) {
+		  //console.log('saved');
+		});
+	}
+}
 
 app.c.bounds=function(){	
 	var b=app.m.bounds={};
@@ -71,9 +64,7 @@ app.c.bounds=function(){
 
 /////////////////////////////////////////////////////////////////////////////////
 
-app.v.init=function(){
-	app.v.style();
-	var b=app.m.bounds;
+app.v.layout=function(){
 	var d="";
 	d+="<input type='text' value='Iconic'>";
 	d+="<div id='radios'><form actio=''>";
@@ -93,16 +84,22 @@ app.v.init=function(){
 	d+="<div id='saved'></div>";
 	d+=davis.license();
 	$("body").html(d);
-	var iconWidth=$("input[name=size]:checked").val();
-	iconWidth=parseInt(iconWidth);
-	//console.log(iconWidth);
+}
+
+app.v.init=function(){
+	app.v.style();
+	app.v.layout();
+	var b=app.m.bounds;
+	var iconWidth=parseInt($("input[name=size]:checked").val() );
 	for (var i=0;i<5;i++){
 		app.v.icon("div#icons",iconWidth);
 	}
+	app.c.listeners();
+
 };
 
 app.v.icon=function(target,width){
-	app.m.text=$("input[type=text]").val().split("")[0];
+	app.m.text=$("input[type=text]").val().slice(0,1);
 
 	var width=width || 144;
 	var height=width;
@@ -127,20 +124,11 @@ app.v.icon=function(target,width){
 		    }
 		});
 
-
-		//send it to the database
-		if (app.m.password!=false){
-		var dataURL=document.getElementById(id).toDataURL();
-		$.ajax({
-			  type: "POST",
-			  url: "http://peopleofthebit.com/luke_davis/labs/iconic/php/createRecord.php",
-			  data: {image:dataURL,password:app.m.password}
-			}).done(function(o) {
-			  //console.log('saved');
-			});
-		}
-
+		app.c.save();
 	});
+
+
+
 	c=document.getElementById(id);
 	var ctx=c.getContext("2d");
 	
@@ -389,6 +377,8 @@ app.v.ngon=function(c){
 	ctx.stroke();
 	return true;
 };
+
+
 app.v.canvas=function(w,h,id){
 	var c="";
 	c+="<canvas width='"+w+"' height='"+h+"' id='"+id+"'></canvas>";
