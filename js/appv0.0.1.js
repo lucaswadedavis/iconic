@@ -99,7 +99,8 @@ app.v.init=function(){
 };
 
 app.v.icon=function(target,width){
-	app.m.text=$("input[type=text]").val().slice(0,1);
+	app.m.text=$("input[type=text]").val();
+	davis.maybe(10,11,function(){app.m.text=app.m.text.slice(0,1);})
 
 	var width=width || 144;
 	var height=width;
